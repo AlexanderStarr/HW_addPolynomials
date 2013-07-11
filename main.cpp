@@ -4,34 +4,38 @@ using namespace std;
 struct Node;
 struct Term;
 
-template <class T>
+// I believe that Node must be a class, and not a struct, to use templates.
+template <typename T>
 struct Node {
-	Node(){};
 	T data;
-	Node * next;
+	Node<T> * next;
 };
 
 struct Term {
-	float co;
-	int ex;
+	float coef;
+	int exp;
 public:
-	Term (float co, int ex) {this->co = co; this->ex = ex;};
+	Term (float co, int ex) {coef = co; exp = ex;};
 	Term (){}; // Must have a default constructor
 	bool operator== (Term te);
 	friend ostream& operator<< (ostream& os, Term& te);
 };
 
 bool Term:: operator== (Term te) {
-	if (co == te.co && ex == te.ex) return true;
+	if (exp == te.exp) return true;
 	else return false;
 }
 
 ostream& operator<< (ostream& os, Term& te) {
-	os<<te.co<<"x^"<<te.ex;
+	os<<te.coef<<"x^"<<te.exp;
 	return os;
 }
 
 int main () 
 {
+	Term myTerm1 = Term(4, 5);
+	Term myTerm2 = Term(5, 5);
+	Node <Term> myNode1;
+	Node <Term> myNode2;
 	return 0;
 }
