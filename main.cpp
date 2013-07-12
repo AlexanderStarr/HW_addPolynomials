@@ -44,7 +44,8 @@ public:
 	Poly(){};
 	Poly(float coef, int exp);
 	void print();
-	void addNode(float coef, int exp);
+	void addNode(Node<Term> * new_node);
+	void insertNode(Node<Term> * predecessor, Node<Term> * new_node);
 };
 
 Poly::Poly(float coef, int exp) {
@@ -64,33 +65,34 @@ void Poly::print() {
 	}
 };
 
-void Poly::addNode(float coef, int exp) {
-	Term * new_term = new Term(coef, exp);
-	Node<Term> * new_node = new Node<Term>;
-	new_node->data = *new_term;
+void Poly::addNode(Node<Term> * new_node) {
 	tail_ptr->next = new_node;
 	tail_ptr = new_node;
 };
 
+void Poly::insertNode(Node<Term> * predecessor, Node<Term> * new_node) {
+	new_node->next = predecessor->next;
+	predecessor->next = new_node;
+	delete new_node;
+}
+
 // ========== main ========== //
 int main () 
 {
-	/*Poly * p1 = new Poly(2.5, 3);
+	Poly * p1 = new Poly(2.5, 3);
 	Poly myPoly1 =  *p1;
-	myPoly1.addNode(1.5, 2);
-	myPoly1.addNode(1, 1);
-	myPoly1.addNode(1, 0);
-	Poly * p2 = new Poly(0.5, 3);
-	Poly myPoly2 = *p2;
-	myPoly2.addNode(0.5, 2);
-	myPoly2.addNode(0, 1);
+	Term * t1 = new Term(1,4);
+	Term * t2 = new Term(2,2);
+	Term * t3 = new Term(2,3);
+	Node<Term> * n1 = new Node<Term>;
+	Node<Term> * n2 = new Node<Term>;
+	Node<Term> * n3 = new Node<Term>;
+	n1->data = *t1;
+	n2->data = *t2;
+	n3->data = *t3;
+	myPoly1.addNode(n1);
+	myPoly1.addNode(n2);
+	myPoly1.insertNode(n1, n3);
 	myPoly1.print();
-	cout << endl;
-	myPoly2.print();*/
-	Term * t1 = new Term(2, 2);
-	Term * t2 = new Term(110, 2);
-	cout << *t1 << " " << *t2 << endl;
-	*t1 + *t2;
-	cout << *t1 << endl;
 	return 0;
 }
