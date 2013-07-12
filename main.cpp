@@ -18,7 +18,7 @@ public:
 	Term (float co, int ex) {coef = co; exp = ex;};
 	Term (){}; // Must have a default constructor
 	bool operator== (Term te);
-	Term * operator+ (Term te);
+	void operator+ (Term te);
 	friend ostream& operator<< (ostream& os, Term& te);
 };
 
@@ -27,9 +27,8 @@ bool Term:: operator== (Term te) {
 	else return false;
 }
 
-Term * Term:: operator+ (Term te) {
-	Term * termSum = new Term((coef + te.coef), exp);
-	return termSum;
+void Term:: operator+ (Term te) {
+	coef += te.coef;
 }
 
 ostream& operator<< (ostream& os, Term& te) {
@@ -89,9 +88,9 @@ int main ()
 	cout << endl;
 	myPoly2.print();*/
 	Term * t1 = new Term(2, 2);
-	Term * t2 = new Term(1, 2);
+	Term * t2 = new Term(110, 2);
 	cout << *t1 << " " << *t2 << endl;
-	Term * tsum = *t1 + *t2;
-	cout << *tsum << endl;
+	*t1 + *t2;
+	cout << *t1 << endl;
 	return 0;
 }
