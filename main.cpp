@@ -3,12 +3,14 @@ using namespace std;
 
 struct Term;
 
+// ========== Node ========== //
 template <class T>
 struct Node {
 	T data;
 	Node<T> * next;
 };
 
+// ========== Term ========== //
 struct Term {
 	float coef;
 	int exp;
@@ -29,19 +31,21 @@ ostream& operator<< (ostream& os, Term& te) {
 	return os;
 }
 
+// ========== Poly ========== //
 template <class T>
 class Poly {
 	Node<T> * head_ptr;
 public:
-	
+	Poly<T>(){};
+	Poly<T>(Node<T> head_node) {head_ptr = &head_node;};
 };
 
+// ========== main ========== //
 int main () 
 {
-	Term myTerm1 = Term(4, 5);
-	Term myTerm2 = Term(5, 5);
-	Node <Term> myNode1;
-	Node <Term> myNode2;
-	myNode1.next = &myNode2;
+	Term t1 = Term(1, 2);
+	Node<Term> n1;
+	n1.data = t1;
+	Poly<Term> p1 = Poly<Term>(n1);
 	return 0;
 }
