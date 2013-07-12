@@ -1,11 +1,9 @@
 #include <iostream>
 using namespace std;
 
-struct Node;
 struct Term;
 
-// I believe that Node must be a class, and not a struct, to use templates.
-template <typename T>
+template <class T>
 struct Node {
 	T data;
 	Node<T> * next;
@@ -37,5 +35,6 @@ int main ()
 	Term myTerm2 = Term(5, 5);
 	Node <Term> myNode1;
 	Node <Term> myNode2;
+	myNode1.next = &myNode2;
 	return 0;
 }
