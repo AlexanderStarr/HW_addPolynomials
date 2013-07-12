@@ -29,6 +29,13 @@ ostream& operator<< (ostream& os, Term& te) {
 	return os;
 }
 
+template <class T>
+class Poly {
+	Node<T> * head_ptr;
+public:
+	
+};
+
 int main () 
 {
 	Term myTerm1 = Term(4, 5);
