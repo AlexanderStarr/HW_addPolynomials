@@ -7,14 +7,13 @@ struct Term;
 template <class T>
 struct Node {
 	T data;
-	Node<T> * next;
+	Node * next;
 };
 
 // ========== Term ========== //
 struct Term {
 	float coef;
 	int exp;
-public:
 	Term (float co, int ex) {coef = co; exp = ex;};
 	Term (){}; // Must have a default constructor
 	bool operator== (Term te);
@@ -36,63 +35,144 @@ ostream& operator<< (ostream& os, Term& te) {
 	return os;
 }
 
-// ========== Poly ========== //
-class Poly {
-	Node<Term> * head_ptr;
-	Node<Term> * tail_ptr;
+// ========== LinkedList ========== //
+template <class T>
+class LinkedList {
+	Node<T> * head;
+	int size;
 public:
-	Poly(){};
-	Poly(float coef, int exp);
-	void print();
-	void addNode(Node<Term> * new_node);
-	void insertNode(Node<Term> * predecessor, Node<Term> * new_node);
+	LinkedList() : head(NULL), size(0) {};
+	~LinkedList();
+	void printList();
+	void printNode(Node<T> * pntr);
+	void reverseList();
+	bool addNode(T data);
+	bool deleteNode(T data);
+	Node<T> * searchNode(T data);
 };
 
-Poly::Poly(float coef, int exp) {
-	Term * first_term = new Term(coef, exp);
-	Node<Term> * head_node = new Node<Term>;
-	head_node->data = *first_term;
-	head_ptr = head_node;
-	tail_ptr = head_node;
-};
+template <class T>
+LinkedList<T>::~LinkedList(){
+	Node<T> * tmp = NULL;
+	while (head) {
+		tmp = head;
+		head = tmp->next;
+		delete(tmp);
+	}
+}
 
-void Poly::print() {
-	Node<Term> * ptr = head_ptr;
-	while (ptr) {
-		Node<Term> node = *ptr;
-		cout << (node.data) << " + ";
-		ptr = node.next;
+template <class T>
+void LinkedList<T>::printList() {
+	Node<T> * tmp = head;
+	while (tmp) {
+		cout << tmp->data << " + ";
+		tmp = tmp->next;
 	}
 };
 
-void Poly::addNode(Node<Term> * new_node) {
-	tail_ptr->next = new_node;
-	tail_ptr = new_node;
+template <class T>
+void LinkedList<T>::printNode(Node<T> * pntr) {
+	cout << pntr->data;
+}
+
+template <class T>
+void LinkedList<T>::reverseList() {
+	Node<T> *curr = head, *prev = head, *save = NULL;
+	while (curr) {
+		save = curr->next;
+		curr->next = prev;
+		prev = curr;
+		curr = save;
+	}
+	head->next = NULL;
+	head = prev;
 };
 
-void Poly::insertNode(Node<Term> * predecessor, Node<Term> * new_node) {
-	new_node->next = predecessor->next;
-	predecessor->next = new_node;
-	delete new_node;
+template <class T>
+bool LinkedList<T>::addNode(T data) {
+	try {
+		Node<T> * tmp = new Node<T>();
+		tmp->data = data;
+		tmp->next = head;
+		head = tmp;
+		++size;
+		return true;
+	} catch (exception & ex) {
+		return false;
+	}
+};
+
+template <class T>
+bool LinkedList<T>::deleteNode(T data) {
+	Node<T> *curr = head, *prev = NULL;
+	while (curr) {
+		if (curr->data == data) {
+			break;
+		}
+		prev = curr;
+		curr = prev->next;
+	}
+	if (curr) {
+		if (prev) {
+			prev->next = curr->next;
+		}
+		else {
+			head = curr->next;
+		}
+		delete(curr);
+		--size;
+	}
+	else {
+		return false;
+	}
+};
+
+template <class T>
+Node<T> * LinkedList<T>::searchNode(T data) {
+	Node<T> * tmp = head;
+	while (tmp) {
+		if (tmp->data == data) {
+			return tmp;
+		}
+		tmp = tmp->next;
+	}
+	return NULL;
+}
+
+// ========== Poly ========== //
+class Poly {
+	LinkedList<Term> termList;
+public:
+	void addTerm(float coeff, int exp);
+	Poly * &operator+ (Poly& p);
+	void print();
+};
+
+void Poly::addTerm(float coeff, int exp){
+	Term t(coeff, exp);
+	Term * search = &(termList.searchNode(t)->data);
+	if (search) {
+		*search + t;
+	}
+	else {
+		termList.addNode(t);
+	}
+};
+
+Poly * &Poly::operator+ (Poly& p) {
+};
+
+void Poly::print() {
+	termList.printList();
 }
 
 // ========== main ========== //
 int main () 
 {
-	Poly * p1 = new Poly(2.5, 3);
-	Poly myPoly1 =  *p1;
-	Term * t1 = new Term(1,4);
-	Term * t2 = new Term(2,2);
-	Term * t3 = new Term(2,3);
-	Node<Term> * n1 = new Node<Term>;
-	Node<Term> * n2 = new Node<Term>;
-	Node<Term> * n3 = new Node<Term>;
-	n1->data = *t1;
-	n2->data = *t2;
-	n3->data = *t3;
-	myPoly1.addNode(n1);
-	myPoly1.addNode(n2);
-	myPoly1.insertNode(n1, n3);
-	myPoly1.print();
+	Poly p1;
+	p1.addTerm(10, 0);
+	p1.addTerm(5, 2);
+	p1.addTerm(7, 2);
+	p1.print();
 	return 0;
 }
