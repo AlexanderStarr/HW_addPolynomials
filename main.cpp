@@ -17,12 +17,18 @@ struct Term {
 	Term (float co, int ex) {coef = co; exp = ex;};
 	Term (){}; // Must have a default constructor
 	bool operator== (Term te);
+	bool operator> (Term te);
 	void operator+ (Term te);
 	friend ostream& operator<< (ostream& os, Term& te);
 };
 
 bool Term:: operator== (Term te) {
 	if (exp == te.exp) return true;
+	else return false;
+}
+
+bool Term:: operator> (Term te) {
+	if (exp > te.exp) return true;
 	else return false;
 }
 
@@ -49,6 +55,7 @@ public:
 	bool addNode(T data);
 	bool deleteNode(T data);
 	Node<T> * searchNode(T data);
+	Node<T> * returnHead() {return head;};
 };
 
 template <class T>
@@ -65,8 +72,11 @@ template <class T>
 void LinkedList<T>::printList() {
 	Node<T> * tmp = head;
 	while (tmp) {
-		cout << tmp->data << " + ";
+		cout << tmp->data;
 		tmp = tmp->next;
+		if (tmp) {
+			cout << " + ";
+		}
 	}
 };
 
@@ -160,6 +170,11 @@ void Poly::addTerm(float coeff, int exp){
 };
 
 Poly * &Poly::operator+ (Poly& p) {
+	Node<Term> * tmp = p.termList.returnHead();
+	while (tmp) {
+		addTerm(tmp->data.coef, tmp->data.exp);
+		tmp = tmp->next;
+	}
 };
 
 void Poly::print() {
@@ -173,6 +188,15 @@ int main ()
 	p1.addTerm(10, 0);
 	p1.addTerm(5, 2);
 	p1.addTerm(7, 2);
+	p1.print();
+	cout << endl;
+	Poly p2;
+	p2.addTerm(1, 1);
+	p2.addTerm(2, 2);
+	p2.addTerm(3, 3);
+	p2.print();
+	p1+p2;
+	cout << endl;
 	p1.print();
 	return 0;
 }
