@@ -56,6 +56,7 @@ public:
 	bool deleteNode(T data);
 	Node<T> * searchNode(T data);
 	Node<T> * getHead() {return head;};
+	int getSize() {return size;};
 };
 
 template <class T>
@@ -78,6 +79,7 @@ void LinkedList<T>::printList() {
 			cout << " + ";
 		}
 	}
+	cout << endl;
 };
 
 template <class T>
@@ -203,24 +205,41 @@ void Poly::bubbleSort() {
 };
 
 // ========== main ========== //
+Poly buildPoly() {
+	Poly newPoly;
+	float coef;
+	int exp;
+	char another = 'y';
+	while (another == 'y') {
+		cout << "Enter a coefficient: ";
+		cin >> coef;
+		cout << "Enter an exponent: ";
+		cin >> exp;
+		newPoly.addTerm(coef, exp);
+		cout << "Add another term? [y/n] ";
+		cin >> another;
+	}
+	return newPoly;
+};
+
 int main () 
 {
-	Poly p1;
-	p1.addTerm(10, 0);
-	p1.addTerm(5, 2);
-	p1.addTerm(7, 2);
-	p1.print();
+	cout << "First Polynomial" << endl;
+	Poly p1 = buildPoly();
 	cout << endl;
-	Poly p2;
-	p2.addTerm(1, 1);
-	p2.addTerm(2, 2);
-	p2.addTerm(3, 3);
+	cout << "Second Polynomial" << endl;
+	Poly p2 = buildPoly();
+	p1.bubbleSort();
+	p2.bubbleSort();
+	cout << endl;
+	cout << "  ";
+	p1.print();
+	cout << "+ ";
 	p2.print();
 	p1+p2;
-	cout << endl;
-	p1.print();
 	p1.bubbleSort();
-	cout << endl;
+	cout << "----------------------------------------" << endl;
+	cout << "  ";
 	p1.print();
 	return 0;
 }
