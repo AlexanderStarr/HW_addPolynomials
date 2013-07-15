@@ -55,7 +55,7 @@ public:
 	bool addNode(T data);
 	bool deleteNode(T data);
 	Node<T> * searchNode(T data);
-	Node<T> * returnHead() {return head;};
+	Node<T> * getHead() {return head;};
 };
 
 template <class T>
@@ -156,6 +156,7 @@ public:
 	void addTerm(float coeff, int exp);
 	Poly * &operator+ (Poly& p);
 	void print();
+	void bubbleSort();
 };
 
 void Poly::addTerm(float coeff, int exp){
@@ -170,7 +171,7 @@ void Poly::addTerm(float coeff, int exp){
 };
 
 Poly * &Poly::operator+ (Poly& p) {
-	Node<Term> * tmp = p.termList.returnHead();
+	Node<Term> * tmp = p.termList.getHead();
 	while (tmp) {
 		addTerm(tmp->data.coef, tmp->data.exp);
 		tmp = tmp->next;
@@ -179,7 +180,27 @@ Poly * &Poly::operator+ (Poly& p) {
 
 void Poly::print() {
 	termList.printList();
-}
+};
+
+void Poly::bubbleSort() {
+	Node<Term> *head = termList.getHead();
+	Node<Term> *scan = head, *last = NULL;
+	while (last != head) {
+		scan = head;
+		while (scan != last) {
+			if (scan->next == last || not scan->next) {
+				last = scan;
+				break;
+			}
+			if (scan->next->data > scan->data) {
+				Term tmp = scan->next->data;
+				scan->next->data = scan->data;
+				scan->data = tmp;
+			}
+			scan = scan->next;
+		}
+	}
+};
 
 // ========== main ========== //
 int main () 
@@ -196,6 +217,9 @@ int main ()
 	p2.addTerm(3, 3);
 	p2.print();
 	p1+p2;
+	cout << endl;
+	p1.print();
+	p1.bubbleSort();
 	cout << endl;
 	p1.print();
 	return 0;
