@@ -22,20 +22,26 @@ struct Term {
 	friend ostream& operator<< (ostream& os, Term& te);
 };
 
+// The equality operator returns true if two terms have the same coefficient.
 bool Term:: operator== (Term te) {
 	if (exp == te.exp) return true;
 	else return false;
 }
 
+// The greater than operator returns true if the exponent of the first term
+// is greater than the exponent of the second.
 bool Term:: operator> (Term te) {
 	if (exp > te.exp) return true;
 	else return false;
 }
 
+// The addition operator performs in place addition on the first term,
+// adding the two coefficients.
 void Term:: operator+ (Term te) {
 	coef += te.coef;
 }
 
+// Allows output of the term using cout.
 ostream& operator<< (ostream& os, Term& te) {
 	os<<te.coef<<"x^"<<te.exp;
 	return os;
@@ -161,6 +167,9 @@ public:
 	void bubbleSort();
 };
 
+// Adds a term to the polynomial.  If a term in the polynomial has the same
+// exponent as the term to add, if simply increases the coefficient of the term.
+// Otherwise, it adds the term to the polynomial.
 void Poly::addTerm(float coeff, int exp){
 	Term t(coeff, exp);
 	Term * search = &(termList.searchNode(t)->data);
@@ -172,6 +181,7 @@ void Poly::addTerm(float coeff, int exp){
 	}
 };
 
+// Adds together two polynomials, using the Poly::addTerm function.
 Poly * &Poly::operator+ (Poly& p) {
 	Node<Term> * tmp = p.termList.getHead();
 	while (tmp) {
@@ -184,6 +194,7 @@ void Poly::print() {
 	termList.printList();
 };
 
+// Sorts the polynomial in descending order, using bubble sort algorithm.
 void Poly::bubbleSort() {
 	Node<Term> *head = termList.getHead();
 	Node<Term> *scan = head, *last = NULL;
